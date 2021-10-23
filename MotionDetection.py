@@ -16,7 +16,7 @@ while True:
         continue
     deltaFrame =  cv2.absdiff(firstFrame,gray)  # to find the difference between frames
 
-    thresholdFrame = cv2.threshold(deltaFrame,50,255,cv2.THRESH_BINARY)[0] # to select the first variable
+    thresholdFrame = cv2.threshold(deltaFrame,50,255,cv2.THRESH_BINARY)[1] # to select the first variable
 
     thresholdFrame = cv2.dilate(thresholdFrame, None, iterations = 2) # apply layer of smoothining -- iteration is for how accurate the smoothing will be, if increased then the program will capture the noise also
     
