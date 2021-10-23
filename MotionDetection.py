@@ -36,7 +36,7 @@ while video.isOpened():
         if cv2.contourArea(contour) < 900 :
             continue
 
-        #cv2.rectangle(frame1,(x,y),(x+w,y+h),(0,255,0),2)
+        cv2.rectangle(frame1,(x,y),(x+w,y+h),(0,255,0),2)
         cv2.drawContours(frame1, cntr, -1, (0, 255, 0), 2)
 
     cv2.imshow('trial', frame1)
