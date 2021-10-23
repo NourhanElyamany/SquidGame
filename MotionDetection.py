@@ -1,6 +1,6 @@
 import cv2 , time
 
-video = cv2.VideoCapture("squid.mp4")
+video = cv2.VideoCapture(0)
 
 frameWidth = int( video.get(cv2.CAP_PROP_FRAME_WIDTH))
 
@@ -33,7 +33,7 @@ while video.isOpened():
 
         (x,y,w,h) = cv2.boundingRect(contour)   # draw a bounding rectangle around the moved obj
         
-        if cv2.contourArea(contour) < 900 :
+        if cv2.contourArea(contour) < 1000 :
             continue
 
         cv2.rectangle(frame1,(x,y),(x+w,y+h),(0,255,0),2)
