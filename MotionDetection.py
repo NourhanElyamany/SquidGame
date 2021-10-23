@@ -1,40 +1,47 @@
 import cv2 , time
 
-video = cv2.VideoCapture(0)
+video = cv2.VideoCapture("squid.mp4")
+
+frameWidth = int( video.get(cv2.CAP_PROP_FRAME_WIDTH))
+
+frameHeight = int ( video.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+fr, frame1 = video.read()
+fr, frame2 = video.read()
 
 firstFrame = None
 
-while True:
-    check, frame = video.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(gray,(21,21),0) #blurring the frame
+while video.isOpened():
 
-    # fixing the first frame as a reference frame
+    diff = cv2.absdiff(frame1, frame2)
 
-    if firstFrame is None :
-        firstFrame = gray
-        continue
-    deltaFrame =  cv2.absdiff(firstFrame,gray)  # to find the difference between frames
+    gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
 
-    thresholdFrame = cv2.threshold(deltaFrame,50,255,cv2.THRESH_BINARY)[1] # to select the first variable
+    blur = cv2.GaussianBlur(gray,(5,5),0) #blurring the frame
 
-    thresholdFrame = cv2.dilate(thresholdFrame, None, iterations = 2) # apply layer of smoothining -- iteration is for how accurate the smoothing will be, if increased then the program will capture the noise also
+    _, thresholdFrame = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY) # to select the first variable
     
-
+    thresholdFrame = cv2.dilate(thresholdFrame, None, iterations = 2) # apply layer of smoothining -- iteration is for how accurate the smoothing will be, if increased then the program will capture the noise also
+   
     # contours is for the motion of any obj in the frame :
 
     cntr,hierarchy = cv2.findContours(thresholdFrame.copy(),cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
+   
     # to avoid considering small noise as contour , specify contour vector :
 
     for contour in cntr:
-        if cv2.contourArea(contour) < 1000 :
-            continue
+
         (x,y,w,h) = cv2.boundingRect(contour)   # draw a bounding rectangle around the moved obj
+        
+        if cv2.contourArea(contour) < 900 :
+            continue
 
-        cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),3)
+        #cv2.rectangle(frame1,(x,y),(x+w,y+h),(0,255,0),2)
+        cv2.drawContours(frame1, cntr, -1, (0, 255, 0), 2)
 
-    cv2.imshow('trial', frame)
+    cv2.imshow('trial', frame1)
+    frame1 = frame2
+    fr, frame2 = video.read()
     key = cv2.waitKey(1)
     if key == ord('q'):
         break
