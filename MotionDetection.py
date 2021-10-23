@@ -23,7 +23,7 @@ while True:
 
     # contours is for the motion of any obj in the frame :
 
-    (cntr,_) = cv2.findContours(thresholdFrame.copy(),cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cntr,hierarchy = cv2.findContours(thresholdFrame.copy(),cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     # to avoid considering small noise as contour , specify contour vector :
 
