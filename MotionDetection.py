@@ -2,9 +2,6 @@ import cv2
 
 video = cv2.VideoCapture('vtest.avi')
 
-frameWidth = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))
-frameHeight = int (video.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
 fr, frame1 = video.read()
 fr, frame2 = video.read()
 
